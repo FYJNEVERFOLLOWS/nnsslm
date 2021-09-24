@@ -47,7 +47,7 @@ def main(test_path, model, fname, method, add_sns):
     net = archs.load_module(model)
     if add_sns:
         net = archs.AddConstantSns(net)
-    print >> sys.stderr, net
+    print(net, file=sys.stderr)
     net.eval()
     net.cuda()
 
@@ -64,7 +64,7 @@ def main(test_path, model, fname, method, add_sns):
     for f in os.listdir(fdir):
         if f.endswith(_FEAT_SUFFIX):
             name = f[:-len(_FEAT_SUFFIX)]
-            print >> sys.stderr, name
+            print(name, file=sys.stderr)
             feat = np.load(os.path.join(fdir, f))
             odtype = feat.dtype
             feat = feat.astype('float32', copy=False)

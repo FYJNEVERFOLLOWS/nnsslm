@@ -73,7 +73,7 @@ def main(test_path, model, extract_ft, win_size, hop_size, n_ctx, n_ahd, method,
     net = archs.load_module(model)
     if add_sns:
         net = archs.AddConstantSns(net)
-    print >> sys.stderr, net
+    print(net, file=sys.stderr)
     net.eval()
     net.cuda()
 
@@ -90,7 +90,7 @@ def main(test_path, model, extract_ft, win_size, hop_size, n_ctx, n_ahd, method,
     for f in os.listdir(ddir):
         if f.endswith(_WAV_SUFFIX):
             name = f[:-len(_WAV_SUFFIX)]
-            print >> sys.stderr, name
+            print(name, file=sys.stderr)
             feat = _load_feature(os.path.join(ddir, f), extract_ft, win_size,
                                  hop_size, n_ctx, n_ahd)
             odtype = feat.dtype

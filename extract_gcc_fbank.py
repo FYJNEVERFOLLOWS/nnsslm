@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 extract_cov_mat.py
 
@@ -38,11 +37,13 @@ def main(wavfile, destfile, win_size, hop_size, nfbank, zoom, eps):
     fs, sig = apkit.load_wav(wavfile)
     tf = apkit.stft(sig, apkit.cola_hamming, win_size, hop_size)
     nch, nframe, _ = tf.shape
+    print("tf: {}".format(tf.shape))
 
     # trim freq bins
-    nfbin = _FREQ_MAX * win_size / fs            # 0-8kHz
+    nfbin = int(_FREQ_MAX * win_size / fs)            # 0-8kHz
     freq = np.fft.fftfreq(win_size)[:nfbin]
     tf = tf[:,:,:nfbin]
+    print("nfbin: {}".format(nfbin))
 
     # compute pairwise gcc on f-banks
     ecov = apkit.empirical_cov_mat(tf, fw=1, tw=1)
@@ -52,16 +53,19 @@ def main(wavfile, destfile, win_size, hop_size, nfbank, zoom, eps):
 
     # merge to a single numpy array, indexed by 'tpbd'
     #                                           (time, pair, bank, delay)
-    feature = np.asarray([fbcc[(i,j)] for i in xrange(nch)
-                                      for j in xrange(nch)
+    feature = np.asarray([fbcc[(i,j)] for i in range(nch)
+                                      for j in range(nch)
                                       if i < j])
     feature = np.moveaxis(feature, 2, 0)
 
+    print("111 feature.shape: {}".format(feature.shape))
+    # print(feature)
     # and map [-1.0, 1.0] to 16-bit integer, to save storage space
     dtype = np.int16
     vmax = np.iinfo(dtype).max
     feature = (feature * vmax).astype(dtype)
-
+    print("222 feature.shape: {}".format(feature.shape))
+    # print(feature)
     np.save(destfile, feature)
 
 if __name__ == '__main__':

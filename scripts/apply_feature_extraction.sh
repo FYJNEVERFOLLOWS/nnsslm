@@ -1,4 +1,3 @@
-#!/bin/bash
 #################################################################################
 # Copyright (c) 2019 Idiap Research Institute, http://www.idiap.ch/             #
 # Written by Weipeng He <weipeng.he@idiap.ch>                                   #
@@ -37,7 +36,7 @@ optn=$4
 
 dest="${ddir}/features/${name}"
 mkdir -p $dest || on_error 'mkdir'
-for x in ${ddir}/data/*.wav
+for x in ${ddir}/audio/*.wav
 do
   echo $x
   $prog $optn $x $dest || on_error $x

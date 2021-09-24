@@ -189,7 +189,7 @@ def save_bf_wav(path, bf_name, sid, src_id, fs, sig, spk_id,
     prefix = os.path.join(path, bf_dir, bf_name, '%s_%d' % (sid, src_id))
     apkit.save_wav(prefix + _WAV_SUFFIX, fs, sig)
     with open(prefix + _SPK_ID_SUFFIX, 'w') as f:
-        print >> f, spk_id
+        print(spk_id, file=f)
 
 class NSrcFilter:
     def __init__(self, nsrc):

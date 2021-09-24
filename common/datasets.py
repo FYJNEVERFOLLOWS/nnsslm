@@ -1066,9 +1066,9 @@ class RandomMixtureRealSegmentsDataset(data.Dataset):
         amps = self._get_amps([v for i, v in sl])
 
         # print volume for analysis
-        print '$volume$ %d %s %s' % (self.nsrc,
+        print('$volume$ %d %s %s' % (self.nsrc,
                                      ' '.join(['%.6g' % v for i, v in sl]),
-                                     ' '.join(['%.6g' % a for a in amps]))
+                                     ' '.join(['%.6g' % a for a in amps])))
         ###########################
 
         if self.single_out is None:
@@ -1110,14 +1110,14 @@ def store_dataset(dataset, prefix):
     ngroup = 1000
     wpt = prefix + '-%06d' + _WAV_SUFFIX
     gpt = prefix + '-%06d' + _GTF_SUFFIX_PATTERN % (win_size, win_size / 2)
-    for i in xrange(0, len(dataset), ngroup):
+    for i in range(0, len(dataset), ngroup):
         gc = i // ngroup
-        print 'g#%03d' % gc
+        print('g#%03d' % gc)
         j = min(len(dataset), i + ngroup)
 
         lsig = []
         lgt = []
-        for k in xrange(i, j):
+        for k in range(i, j):
             (nfs, sig), gt = dataset[k]
             assert nfs == fs
             assert sig.shape == (nch, win_size)
