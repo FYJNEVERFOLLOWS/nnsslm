@@ -1,6 +1,7 @@
 import math
 import os
 import pickle
+import random
 
 import numpy as np
 import torch
@@ -11,13 +12,17 @@ gcc_fbank_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/features/gcc_fbank" # 
 
 
 class DataLoader(object):
-    def __init__(self, batchsize):
+    def __init__(self, batchsize, shuffle=False):
         self.batch_size = batchsize
+        self.shuffle = shuffle
 
     def generate(self):
         # pkls = os.listdir(gt_file_path)
         feats = os.listdir(gcc_fbank_path)[:200]
         cnt_files = len(feats)
+        if self.shuffle:
+            random.shuffle(feats)
+
         batch_size = 4
         start = 0
         while start + batch_size <= cnt_files:
@@ -58,7 +63,7 @@ class DataLoader(object):
             yield batch_x, batch_y
 
 if __name__ == '__main__':
-    data_loader = DataLoader(batchsize=4)
+    data_loader = DataLoader(batchsize=4, shuffle=True)
     for batch_x, batch_y in data_loader.generate():
         print("batch_x {}".format(batch_x.shape))
         print("batch_y {}".format(batch_y.shape))
