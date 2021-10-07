@@ -4,11 +4,12 @@ from pathlib import Path
 
 import numpy as np
 
-gt_frame_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/gt_frame"
-gcc_fbank_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/features/gcc_fbank"  # gcc-fbank特征所在目录
-train_data_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/train_data_frame_level" # 每帧的特征和标签
+gt_frame_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_301/gt_frame_wo-0-src"
+gcc_fbank_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_301/features/gcc_fbank"  # gcc-fbank特征所在目录
+train_data_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_301/train_data_frame_level" # 每帧的特征和标签
 
 gts = list(Path(gt_frame_path).rglob('*.txt'))
+cnt_frames = 0
 for gt in gts:
     gt = str(gt)
     audio_id = gt.split('/')[-1].split('.')[0]
@@ -16,7 +17,7 @@ for gt in gts:
     feat_path = os.path.join(gcc_fbank_path, audio_id + '.npy')
     print('feat: ' + feat_path)
     gcc_fbank = np.load(feat_path, allow_pickle=True)
-    print(gcc_fbank.shape)
+    cnt_frames += gcc_fbank.shape[0]
     feat_frame_idx = 0
     with open(gt, "r") as f:
         lines = f.readlines()
@@ -56,6 +57,5 @@ for gt in gts:
         np.save(save_path, train_data)
         feat_frame_idx += 1
 
-# pkls = os.listdir(gt_file_path)
-# print(pkls)
+print(cnt_frames)
 
