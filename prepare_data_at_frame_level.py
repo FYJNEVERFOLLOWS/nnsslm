@@ -11,7 +11,7 @@ train_data_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/train_data_frame_leve
 
 
 class DataLoader(object):
-    def __init__(self, batchsize, shuffle=False):
+    def __init__(self, batchsize=4, shuffle=False):
         self.batch_size = batchsize
         self.shuffle = shuffle
 
