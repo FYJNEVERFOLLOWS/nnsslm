@@ -6,6 +6,9 @@ from torch import optim
 import prepare_data_at_frame_level
 
 
+train_data_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/train_data_frame_level"
+test_data_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/test_data_frame_level"
+
 # design model
 class CNN(nn.Module):
     def __init__(self):
@@ -54,14 +57,15 @@ model = CNN()
 
 # construct loss and optimizer
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
+# optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 # training cycle forward, backward, update
 def train(epoch):
     running_loss = 0.0
 
-    data_loader = prepare_data_at_frame_level.DataLoader()
+    data_loader = prepare_data_at_frame_level.DataLoader(train_data_path)
     # Train
     iter = 0
     for (batch_x, batch_y) in data_loader.generate():
@@ -86,9 +90,22 @@ def train(epoch):
 
         iter += 1
     print('iter: {}'.format(iter))
-        # Evaluate
 
+# Evaluate
+def test():
+    correct = 0
+    total = 0
+    data_loader = prepare_data_at_frame_level.DataLoader(test_data_path)
+    with torch.no_grad():
+        for (batch_x, batch_y) in data_loader.generate():
+            # 获得模型预测结果
+            output = model(batch_x)
+            _, predicted = torch.max(output.data, dim=1) # dim=1是class所在维度，0是batch_size所在维度。等价于 predicted = output.argmax(dim=-1)
+            total += batch_y.size(0) # batch_y.shape[0] = batch_size, predicted.shape: [batch_size] / torch.Size([batch_size])
+            correct += (predicted == batch_y).sum().item() # 张量之间的比较运算，等价于 torch.sum(predicted == batch_y).item()
+    print('accuracy on test set: %.2f %% ' % (100.0 * correct / total))
 
 if __name__ == '__main__':
     for epoch in range(10):
         train(epoch)
+        test()

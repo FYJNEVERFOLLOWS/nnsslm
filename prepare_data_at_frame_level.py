@@ -1,22 +1,18 @@
-import math
 import os
-import pickle
 import random
 
 import numpy as np
 import torch
-from torch import nn
-
-train_data_path = "/Users/fuyanjie/Desktop/temp/exp_nnsslm/train_data_frame_level"
 
 
 class DataLoader(object):
-    def __init__(self, batchsize=4, shuffle=False):
+    def __init__(self, data_path, batchsize=4, shuffle=False):
         self.batch_size = batchsize
         self.shuffle = shuffle
+        self.data_path = data_path
 
     def generate(self):
-        frames = os.listdir(train_data_path)[:201]
+        frames = os.listdir(self.data_path)
         cnt_files = len(frames)
         if self.shuffle:
             random.shuffle(frames)
@@ -31,7 +27,7 @@ class DataLoader(object):
             batch_y = []
 
             for frame in batch_frame:
-                origin_data = np.load(os.path.join(train_data_path, frame), allow_pickle=True)
+                origin_data = np.load(os.path.join(self.data_path, frame), allow_pickle=True)
                 # pick out single source labels
                 ########## remove the code below to cancel filtering single source labels #####################
                 if np.isnan(origin_data[1][0]) or not np.isnan(origin_data[1][1]):
@@ -63,7 +59,7 @@ class DataLoader(object):
             yield batch_x, batch_y
 
 if __name__ == '__main__':
-    data_loader = DataLoader(batchsize=4, shuffle=True)
+    data_loader = DataLoader(data_path="/Users/fuyanjie/Desktop/temp/exp_nnsslm/train_data_frame_level", batchsize=4, shuffle=True)
     for batch_x, batch_y in data_loader.generate():
         print("batch_x {}".format(batch_x.shape))
         print("batch_y {}".format(batch_y.shape))
