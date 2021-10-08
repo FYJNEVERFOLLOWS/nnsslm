@@ -12,27 +12,28 @@ class CNN(nn.Module):
         super(CNN, self).__init__()
         # first conv and second conv
         self.conv_1 = nn.Sequential(
-            nn.Conv2d(6, 12, kernel_size=(5, 5), stride=2),
+            nn.Conv2d(6, 12, kernel_size=(5, 5), stride=2, padding=2),
             nn.BatchNorm2d(12), nn.ReLU(inplace=True)
         )
         self.conv_2 = nn.Sequential(
-            nn.Conv2d(12, 24, kernel_size=(5, 5), stride=2),
+            nn.Conv2d(12, 24, kernel_size=(5, 5), stride=2, padding=2),
             nn.BatchNorm2d(24), nn.ReLU(inplace=True)
         )
         self.conv_3 = nn.Sequential(
-            nn.Conv2d(24, 48, kernel_size=(5, 5), stride=2),
+            nn.Conv2d(24, 48, kernel_size=(5, 5), stride=2, padding=2),
             nn.BatchNorm2d(48), nn.ReLU(inplace=True)
         )
         self.conv_4 = nn.Sequential(
-            nn.Conv2d(48, 96, kernel_size=(5, 5), stride=2),
+            nn.Conv2d(48, 96, kernel_size=(5, 5), stride=2, padding=2),
             nn.BatchNorm2d(96), nn.ReLU(inplace=True)
         )
         self.fc = nn.Sequential(
-            nn.Linear(in_features=96*18*24, out_features=360),
+            nn.Linear(in_features=96*3*4, out_features=360),
             # nn.Sigmoid()
         )
 
     def forward(self, x):
+        batch_size = x.size(0)
         x = self.conv_1(x)
         print("after conv_1 x.shape:{}".format(x.shape))
         x = self.conv_2(x)
@@ -41,8 +42,8 @@ class CNN(nn.Module):
         print("after conv_3 x.shape:{}".format(x.shape))
         x = self.conv_4(x)
         print("after conv_4 x.shape:{}".format(x.shape))
-        # flatten data from (n, 96, 18, 24) to (n, 96*18*24)
-        x = x.view(-1, 96*18*24)
+        # flatten data from (n, 96, 3, 4) to (n, 96*3*4)
+        x = x.view(batch_size, -1)
         print('before fc x.shape:{}'.format(x.shape))
         x = self.fc(x)
 
@@ -69,6 +70,7 @@ def train(epoch):
         print("batch_y {}".format(batch_y.shape))
         # 获得模型预测结果
         output = model(batch_x)
+        print("output {}".format(output.shape))
         # 交叉熵代价函数
         loss = criterion(output, batch_y)
 
@@ -83,7 +85,7 @@ def train(epoch):
         optimizer.step()
 
         iter += 1
-
+    print('iter: {}'.format(iter))
         # Evaluate
 
 

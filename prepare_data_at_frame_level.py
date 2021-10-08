@@ -20,6 +20,7 @@ class DataLoader(object):
         cnt_files = len(frames)
         if self.shuffle:
             random.shuffle(frames)
+        print("======")
 
         batch_size = self.batch_size
         start = 0
@@ -35,6 +36,8 @@ class DataLoader(object):
                 ########## remove the code below to cancel filtering single source labels #####################
                 if np.isnan(origin_data[1][0]) or not np.isnan(origin_data[1][1]):
                     continue
+                if origin_data[1][0] == 360:
+                    origin_data[1][0] = 0
                 y = torch.LongTensor([origin_data[1][0]])
                 ###############################################################################################
                 # y = torch.Tensor(origin_data[1])
@@ -54,8 +57,8 @@ class DataLoader(object):
             # print("batch_x.shape {}".format(batch_x.shape))
             # batch_y.shape should be torch.Size([4, 2])
             batch_y = torch.stack(batch_y, dim=0)
+            batch_y = torch.squeeze(batch_y, dim=-1)
             # print("batch_y {}".format(batch_y))
-            print("======")
 
             yield batch_x, batch_y
 
