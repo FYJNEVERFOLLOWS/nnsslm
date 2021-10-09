@@ -4,9 +4,9 @@ from pathlib import Path
 
 import numpy as np
 
-gt_frame_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_106/gt_frame"
-gcc_fbank_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_106/features/gcc_fbank"  # gcc-fbank特征所在目录
-train_data_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/train_data_frame_level" # 每帧的特征和标签
+gt_frame_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_library/gt_frame"
+gcc_fbank_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_library/features/gcc_fbank"  # gcc-fbank特征所在目录
+train_data_path = "/Work20/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/test_data_frame_level" # 每帧的特征和标签
 
 gts = list(Path(gt_frame_path).rglob('*.txt'))
 cnt_frames = 0
@@ -34,7 +34,7 @@ for gt in gts:
                 train_data = np.array([gcc_fbank_frame_level, label_frame_level])
                 save_path = os.path.join(train_data_path, '{}_frame_{}.npy'.format(audio_id, feat_frame_idx))
                 print(save_path)
-                print("111 train_data[1] {}".format(train_data[1]))
+                # print("111 train_data[1] {}".format(train_data[1]))
                 np.save(save_path, train_data)
                 feat_frame_idx += 1
             doa_gt_1 = np.arctan2(float(gt_frame_data[1]), float(gt_frame_data[2]))
@@ -47,7 +47,7 @@ for gt in gts:
             train_data = np.array([gcc_fbank_frame_level, label_frame_level])
             save_path = os.path.join(train_data_path, '{}_frame_{}.npy'.format(audio_id, feat_frame_idx))
             print(save_path)
-            print("222 train_data[1] {}".format(train_data[1]))
+            # print("222 train_data[1] {}".format(train_data[1]))
             np.save(save_path, train_data)
             feat_frame_idx += 1
     while feat_frame_idx < gcc_fbank.shape[0]:
@@ -56,7 +56,7 @@ for gt in gts:
         train_data = np.array([gcc_fbank_frame_level, label_frame_level])
         save_path = os.path.join(train_data_path, '{}_frame_{}.npy'.format(audio_id, feat_frame_idx))
         print(save_path)
-        print("333 train_data[1] {}".format(train_data[1]))
+        # print("333 train_data[1] {}".format(train_data[1]))
         np.save(save_path, train_data)
         feat_frame_idx += 1
 

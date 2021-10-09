@@ -58,14 +58,11 @@ def main(wavfile, destfile, win_size, hop_size, nfbank, zoom, eps):
                                       if i < j])
     feature = np.moveaxis(feature, 2, 0)
 
-    print("111 feature.shape: {}".format(feature.shape))
-    # print(feature)
     # and map [-1.0, 1.0] to 16-bit integer, to save storage space
     dtype = np.int16
     vmax = np.iinfo(dtype).max
     feature = (feature * vmax).astype(dtype)
-    print("222 feature.shape: {}".format(feature.shape))
-    # print(feature)
+    print("feature.shape: {}".format(feature.shape))
     np.save(destfile, feature)
 
 if __name__ == '__main__':
