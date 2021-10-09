@@ -90,14 +90,14 @@ def train(epoch):
         # print("output {}".format(output.shape))
 
         # 交叉熵代价函数
-        loss = criterion(output, batch_y)
+        loss = criterion(output, batch_y) # averaged loss on batch_y
 
         running_loss += loss.item()
         if iter % 100 == 0:
             print('[%d, %5d] loss: %.5f' % (epoch + 1, iter + 1, running_loss / 100))
             running_loss = 0.0
         with torch.no_grad():
-            total_loss += loss.clone().detach().item()
+            total_loss += loss.clone().detach().item() * batch_y.shape[0]
             sam_size += batch_y.shape[0]
 
         # Backward
