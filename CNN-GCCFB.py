@@ -61,7 +61,7 @@ model.to(device)
 
 # construct loss and optimizer
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
 train_data = DataLoader(prepare_data_at_frame_level_dataloader.SSLR_Dataset(train_data_path), batch_size=256,
                         shuffle=True, num_workers=4)  # train_data is a tuple: (batch_x, batch_y)
@@ -93,8 +93,8 @@ def train(epoch):
         loss = criterion(output, batch_y)
 
         running_loss += loss.item()
-        if iter % 1000 == 0:
-            print('[%d, %5d] loss: %.3f' % (epoch + 1, iter + 1, running_loss / 1000))
+        if iter % 100 == 0:
+            print('[%d, %5d] loss: %.5f' % (epoch + 1, iter + 1, running_loss / 100))
             running_loss = 0.0
         with torch.no_grad():
             total_loss += loss.clone().detach().item()
@@ -105,9 +105,10 @@ def train(epoch):
         loss.backward()
         optimizer.step()
 
+        # 一个iter以一个batch为单位
         iter += 1
     # print the MSE and the sample size
-    print(f'epoch {epoch} loss {total_loss / sam_size} sam_size {sam_size}')
+    print(f'epoch {epoch + 1} loss {total_loss / sam_size} sam_size {sam_size}')
 
 # Evaluate
 def test():
