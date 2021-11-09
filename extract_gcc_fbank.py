@@ -34,35 +34,40 @@ def output_path(wavfile, destdir):
 
 def main(wavfile, destfile, win_size, hop_size, nfbank, zoom, eps):
     # load signal
-    fs, sig = apkit.load_wav(wavfile)
+    fs, sig = apkit.load_wav(wavfile)  # sig.shape: [C, length] ndarray(float64)
+    # feature_list = []
+    # for idx_sample in range(0, sig.shape[1] - len_segment, len_segment // 2):
     tf = apkit.stft(sig, apkit.cola_hamming, win_size, hop_size)
-    nch, nframe, _ = tf.shape
-    print("tf: {}".format(tf.shape))
+    # tf.shape: [C, num_frames, win_size] tf.dtype: complex128
+    nch, nframe, _ = tf.shape # (4, num_frames, 8192)
+    print("A tf.shape: {}".format(tf.shape))
 
     # trim freq bins
-    nfbin = int(_FREQ_MAX * win_size / fs)            # 0-8kHz
-    freq = np.fft.fftfreq(win_size)[:nfbin]
-    tf = tf[:,:,:nfbin]
-    print("nfbin: {}".format(nfbin))
+    max_fbin = int(_FREQ_MAX * win_size / fs)  # 100-8kHz
+    min_fbin = int(_FREQ_MIN * win_size / fs)  # 100-8kHz
+    freq = np.fft.fftfreq(win_size)[min_fbin:max_fbin]
+    tf = tf[:, :, min_fbin:max_fbin]  # tf.shape: (4, num_frames, 1348)
+    print("B tf.shape: {}".format(tf.shape))
 
     # compute pairwise gcc on f-banks
     ecov = apkit.empirical_cov_mat(tf, fw=1, tw=1)
     fbw = apkit.mel_freq_fbank_weight(nfbank, freq, fs, fmax=_FREQ_MAX,
-                                      fmin=_FREQ_MIN)
+                                        fmin=_FREQ_MIN)
     fbcc = apkit.gcc_phat_fbanks(ecov, fbw, zoom, freq, eps=eps)
 
     # merge to a single numpy array, indexed by 'tpbd'
-    #                                           (time, pair, bank, delay)
+    #                                           (time=num_frames, pair=6, bank=40, delay=51)
     feature = np.asarray([fbcc[(i,j)] for i in range(nch)
-                                      for j in range(nch)
-                                      if i < j])
+                                        for j in range(nch)
+                                        if i < j])
     feature = np.moveaxis(feature, 2, 0)
 
     # and map [-1.0, 1.0] to 16-bit integer, to save storage space
     dtype = np.int16
     vmax = np.iinfo(dtype).max
-    feature = (feature * vmax).astype(dtype)
-    print("feature.shape: {}".format(feature.shape))
+    feature = (feature * vmax).astype(dtype) # feature.shape: (num_frames, 6, 40, 51)
+
+    print(f'feature.shape {feature.shape}')
     np.save(destfile, feature)
 
 if __name__ == '__main__':
@@ -87,6 +92,8 @@ if __name__ == '__main__':
     main(args.file, output_path(args.file, args.dest), args.window_size,
          args.hop_size, args.nfbank, args.cc_zoom, args.eps)
 
-# -*- Mode: Python -*-
+
+
+# -*- Mode: Python -*-s
 # vi:si:et:sw=4:sts=4:ts=4
 
