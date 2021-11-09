@@ -22,17 +22,17 @@ echo "job start time: `date`"
 
 # python ../gen_single_source_frame_level_data.py
 
-# python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_test_library_w8192/gt_frame" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_library/features/gcc_fbank" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/test_data_frame_level_gcc"
+python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_test_library_w8192/gt_frame" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_library/features/gcc_fbank" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/test_data_frame_level_gcc"
 
-# python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_test_106_w8192/gt_frame" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_106/features/gcc_fbank" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/test_data_frame_level_gcc"
+python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_test_106_w8192/gt_frame" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/lsp_test_106/features/gcc_fbank" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/test_data_dir/test_data_frame_level_gcc"
 
-# python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_train_106_w8192/gt_frame" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_106/features/gcc_fbank" \
-#                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/train_data_frame_level_gcc"
+python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_train_106_w8192/gt_frame" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_106/features/gcc_fbank" \
+                                                "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/train_data_frame_level_gcc"
 
 python ../gen_multi_sources_frame_level_data.py "/CDShare2/SSLR/lsp_train_301_w8192/gt_frame" \
                                                 "/Work18/2021/fuyanjie/exp_data/exp_nnsslm/train_data_dir/lsp_train_301/features/gcc_fbank" \
