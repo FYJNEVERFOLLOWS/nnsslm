@@ -45,9 +45,8 @@ The neural network models can simultaneously detect and localize multiple sound 
 Usage
 .....
 
-1. Run qsub_feat_ex.sh for feature extraction
-2. Run gen_data_frame_level.sh to merge feature and label into pickle file
-3. Run train_with_CNN-GCCFB.sh
+1. Run ./qsub/gen_data_frame_level.sh to extract features, then write them and the corresponding label into pickle file
+2. Run ./qsub/train_with_CNN-GCCFB.sh and that's it
 
 
 
